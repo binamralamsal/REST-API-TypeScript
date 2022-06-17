@@ -2,7 +2,7 @@
   "name": "rest-api-typescript",
   "version": "1.0.0",
   "description": "",
-  "main": "src/main.ts",
+  "main": "src/server.ts",
   "scripts": {
     "start": "ts-node .",
     "dev": "ts-node-dev . --respawn --transpile-only"
