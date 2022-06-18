@@ -1,17 +1,15 @@
+import { connect, set } from "mongoose";
 import express, { Application } from "express";
 
+import config from "./config";
 import Routes from "./interfaces/routes.interface";
 import errorMiddleware from "./middlewares/error.middleware";
 
 class App {
   public app: Application;
-  public env: string;
-  public port: string | number;
 
   constructor(routes: Routes[]) {
     this.app = express();
-    this.env = process.env.NODE_ENV || "development";
-    this.port = process.env.PORT || 4000;
 
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
@@ -19,14 +17,28 @@ class App {
   }
 
   public async listen() {
-    this.app.listen(this.port, () => {
+    await this.connectToMongodb();
+
+    this.app.listen(config.PORT, () => {
       console.log(`=================================`);
-      console.log(`======= ENV: ${this.env} =======`);
-      console.log(`🚀 App listening on the port ${this.port}`);
+      console.log(`======= ENV: ${config.NODE_ENV} =======`);
+      console.log(`🚀 App listening on the port ${config.PORT}`);
       console.log(`=================================`);
     });
   }
 
+  public async connectToMongodb() {
+    try {
+      if (config.NODE_ENV !== "production") {
+        set("debug", true);
+      }
+
+      await connect(config.MONGODB_URI);
+    } catch (error) {
+      process.exit(0);
+    }
+  }
+  
   private initializeMiddlewares() {
     this.app.use(express.json());
   }
