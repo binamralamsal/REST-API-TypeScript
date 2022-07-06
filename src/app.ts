@@ -3,7 +3,7 @@ import express, { Application } from "express";
 
 import config from "./config";
 import Routes from "./interfaces/routes.interface";
-import errorMiddleware from "./middlewares/error.middleware";
+import { error } from "./middlewares";
 
 class App {
   public app: Application;
@@ -38,7 +38,7 @@ class App {
       process.exit(0);
     }
   }
-  
+
   private initializeMiddlewares() {
     this.app.use(express.json());
   }
@@ -50,7 +50,7 @@ class App {
   }
 
   private initializeErrorHandling() {
-    this.app.use(errorMiddleware);
+    this.app.use(error);
   }
 }
 

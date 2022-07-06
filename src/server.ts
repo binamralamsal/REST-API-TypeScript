@@ -1,7 +1,7 @@
-import App from './app';
+import App from "./app";
 
-import FeedRoute from "./routes/feed.route";
+import { AuthRoutes } from "./routes";
 
-const app = new App([new FeedRoute()]);
+const app = new App([new AuthRoutes()]);
 
 app.listen();

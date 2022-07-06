@@ -10,6 +10,9 @@ const config = cleanEnv(process.env, {
   PORT: num({
     default: 3000,
   }),
+  JWT_SECRET: str({
+    default: "VERY_VERY_STRONG_JWT_SECRET_THAT_NO_ONE_CAN_GUESS",
+  }),
 });
 
 export default config;
