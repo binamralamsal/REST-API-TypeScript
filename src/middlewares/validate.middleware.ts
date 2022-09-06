@@ -1,18 +1,17 @@
 import { Request, Response, NextFunction } from "express";
 import { HttpException } from "../exceptions";
-import Joi from "joi";
+import { z, AnyZodObject } from "zod";
 
-const validate = (schema: Joi.ObjectSchema) => {
-  return (req: Request, _: Response, next: NextFunction) => {
-    const { value, error } = schema.validate(req.body, {
-      abortEarly: false,
-    });
+const validate = (schema: AnyZodObject) => {
+  return async (req: Request, _: Response, next: NextFunction) => {
+    try {
+      const parsedBody = await schema.parseAsync(req.body);
+      req.body = parsedBody;
 
-    if (error)
-      throw new HttpException(422, error.message, { details: error.details });
-
-    req.body = value;
-    next();
+      return next();
+    } catch (error) {
+      throw new HttpException(422, "Validation error", error as object);
+    }
   };
 };
 
