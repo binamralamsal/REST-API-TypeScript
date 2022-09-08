@@ -1,4 +1,4 @@
-import { connect, set } from "mongoose";
+import mongoose from "mongoose";
 import express, { Application } from "express";
 
 import config from "./config";
@@ -17,24 +17,26 @@ class App {
   }
 
   public async listen() {
+    console.log("Connecting to mopngodb");
     await this.connectToMongodb();
 
     this.app.listen(config.PORT, () => {
-      console.log(`=================================`);
+      console.log("=================================");
       console.log(`======= ENV: ${config.NODE_ENV} =======`);
       console.log(`🚀 App listening on the port ${config.PORT}`);
-      console.log(`=================================`);
+      console.log("=================================");
     });
   }
 
   public async connectToMongodb() {
     try {
       if (config.NODE_ENV !== "production") {
-        set("debug", true);
+        mongoose.set("debug", true);
       }
 
-      await connect(config.MONGODB_URI);
+      await mongoose.connect(config.MONGODB_URI);
     } catch (error) {
+      console.log(error);
       process.exit(0);
     }
   }

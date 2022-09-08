@@ -1,4 +1,5 @@
 import App from "./app";
+import "module-alias/register";
 
 import { AuthRoutes } from "./routes";
 
